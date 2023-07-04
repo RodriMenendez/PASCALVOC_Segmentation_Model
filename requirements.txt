@@ -1,0 +1,7 @@
+torch
+torchvision
+numpy
+wandb
+lightning
+evaluate
+collections
