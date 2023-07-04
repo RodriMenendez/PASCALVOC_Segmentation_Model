@@ -1,11 +1,6 @@
 import torch
 import torchvision
 import torchvision.transforms as transforms
-from subprocess import run
-
-# extracting data from tar file
-cmd = 'tar xf /content/drive/MyDrive/SURF_2023/Practice/Colabs/pascal/VOCtrainval_11-May-2012.tar -C /content/'
-run(cmd, shell=True)
 
 class ValueReplace():
     def __init__(self, old_val, new_val):

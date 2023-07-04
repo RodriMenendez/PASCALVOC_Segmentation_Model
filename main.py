@@ -11,8 +11,11 @@ import get_data
 import models
 import lightning_modules
 
-import time
+import timefrom subprocess import run
 
+# extracting data from tar file
+cmd = 'tar xf /content/drive/MyDrive/SURF_2023/Practice/Colabs/pascal/VOCtrainval_11-May-2012.tar -C /content/'
+run(cmd, shell=True)
 
 # get the data
 train_data, trainloader, test_data, testloader = get_data.get_PASCAL()
