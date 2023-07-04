@@ -4,4 +4,3 @@ numpy
 wandb
 lightning
 evaluate
-collections
