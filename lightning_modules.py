@@ -24,8 +24,10 @@ class PASCALModule(L.LightningModule):
     def training_step(self, batch, batch_idx):
         inputs, labels = batch
 
+        labels_one_hot = torch.permute(F.one_hot(labels.to(torch.int64), num_classes=22), (0, 3, 1, 2))
+
         logits = self.model.logits(inputs)
-        loss = self.loss_module(logits, labels.long())
+        loss = self.loss_module(logits, labels_one_hot.float())
         preds = self.model(inputs)
         iou = self.iou.compute(predictions=preds, references=labels, num_labels=22, ignore_index=self.ignore_index)
         mean_iou = iou['mean_iou']

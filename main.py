@@ -11,7 +11,8 @@ import get_data
 import models
 import lightning_modules
 
-import timefrom subprocess import run
+import time
+from subprocess import run
 
 # extracting data from tar file
 cmd = 'tar xf /content/drive/MyDrive/SURF_2023/Practice/Colabs/pascal/VOCtrainval_11-May-2012.tar -C /content/'
