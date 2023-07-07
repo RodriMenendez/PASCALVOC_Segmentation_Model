@@ -5,7 +5,7 @@ import lightning as L
 import evaluate
 
 class PascalModule(L.LightningModule):
-    def __init__(self, model, lr=1e-3, momentum=0.9, ignore_index=0):
+    def __init__(self, model, lr=1e-3, momentum=0.9, ignore_index=0, wd=1e-3):
         super().__init__()
         self.model = model
         weights = torch.tensor([0.5, 1, 1, 1, 1, 1, 1,\
@@ -15,6 +15,7 @@ class PascalModule(L.LightningModule):
         self.clf_loss_module = nn.CrossEntropyLoss(weight=weights)
         self.lr = lr
         self.momentum = momentum
+        self.wd = wd
         self.iou = evaluate.load("mean_iou")
         self.ignore_index = ignore_index
 
@@ -22,7 +23,7 @@ class PascalModule(L.LightningModule):
         return self.model(imgs)
 
     def configure_optimizers(self):
-        optimizer = torch.optim.SGD(self.model.parameters(), lr=self.lr, momentum=self.momentum)
+        optimizer = torch.optim.SGD(self.model.parameters(), lr=self.lr, momentum=self.momentum, weight_decay=self.wd)
         return optimizer
 
     def labels_clf_one_hot(self, labels):
@@ -63,12 +64,12 @@ class PascalModule(L.LightningModule):
         labels_clf_one_hot = self.labels_clf_one_hot(labels)
 
         if len(labels_clf_one_hot.shape) == 1:
-            # batch dimension not on labels if only input
+            # batch dimension not on labels if only one input
             labels_clf_one_hot = labels_clf_one_hot.unsqueeze(0)
 
         # logits for segmentation and classification
         logits = self.model.logits(inputs)
-        logits_clf = self.model.classification_logits(inputs)
+        logits_clf = self.model.saved_classification_logits()
 
         # calcuating loss
         loss_seg = self.seg_loss_module(logits, labels_one_hot.float())
