@@ -38,7 +38,7 @@ autoencoder = lightning_modules.PASCALModule(seg_model)
 
 # train
 trainer = L.pytorch.Trainer(accelerator='auto', max_epochs=4, logger=wandb_logger)
-trainer.fit(model=autoencoder, train_dataloaders=trainloader)
+trainer.fit(model=autoencoder, train_dataloaders=trainloader, val_dataloaders=testloader)
 
 # test
 test_result = trainer.test(autoencoder, dataloaders=testloader, verbose=False)
