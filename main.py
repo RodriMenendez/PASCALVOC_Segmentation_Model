@@ -23,7 +23,7 @@ train_data, trainloader, test_data, testloader = get_data.get_PASCAL()
 
 # get models
 resnet_model = models.ResNet18()
-seg_model = models.Segmentation(resnet_model, out_channels=64)
+seg_model = models.Segmentation(resnet_model, out_channels=128)
 
 # wandb
 wandb_config = {

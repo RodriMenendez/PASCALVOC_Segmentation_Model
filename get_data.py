@@ -47,7 +47,7 @@ def get_PASCAL(path='/content/', batch_size=4):
         Squeeze(),
     ])
 
-    train_data = torchvision.datasets.VOCSegmentation(root=path, year='2012', image_set='trainval', \
+    train_data = torchvision.datasets.VOCSegmentation(root=path, year='2012', image_set='train', \
                     transform=transform, target_transform=target_transform, download=False)
 
     trainloader = torch.utils.data.DataLoader(train_data, batch_size=batch_size,
