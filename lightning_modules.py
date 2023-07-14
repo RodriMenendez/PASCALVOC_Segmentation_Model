@@ -5,7 +5,7 @@ import lightning as L
 import evaluate
 
 class PascalModule(L.LightningModule):
-    def __init__(self, model, lr=1e-3, momentum=0.9, ignore_index=(0, 21)):
+    def __init__(self, model, lr=1e-3, momentum=0.9, ignore_index=0):
         super().__init__()
         self.model = model
         self.loss_module = nn.CrossEntropyLoss()
@@ -28,7 +28,7 @@ class PascalModule(L.LightningModule):
 
         logits = self.model.logits(inputs)
         loss = self.loss_module(logits, labels_one_hot.float())
-        if batch_idx % 50 == 0:
+        if batch_idx % 30 == 0:
             preds = self.model(inputs)
             iou = self.iou.compute(predictions=preds, references=labels, num_labels=22, ignore_index=self.ignore_index)
             mean_iou = iou['mean_iou']
@@ -46,13 +46,13 @@ class PascalModule(L.LightningModule):
         inputs, labels = batch
         if batch_idx % 30 == 0:
             preds = self.model(inputs)
-            batch_iou = self.iou.compute(predictions=preds, references=labels, num_labels=22, ignore_index=0)
+            batch_iou = self.iou.compute(predictions=preds, references=labels, num_labels=22, ignore_index=self.ignore_index)
             mean_iou = batch_iou['mean_iou']
             acc = batch_iou['mean_accuracy']
 
             # log accuracy and loss
-            self.log("Test Pixel Accuracy", acc)
-            self.log("Test Mean IoU", mean_iou)
+            self.log("Val Pixel Accuracy", acc)
+            self.log("Val Mean IoU", mean_iou)
 
     def test_step(self, batch, batch_idx):
         inputs, labels = batch

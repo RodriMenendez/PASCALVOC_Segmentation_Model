@@ -19,7 +19,7 @@ cmd = 'tar xf /content/drive/MyDrive/SURF_2023/Practice/Colabs/pascal/VOCtrainva
 run(cmd, shell=True)
 
 # get the data
-train_data, trainloader, test_data, testloader = get_data.get_PASCAL()
+train_data, trainloader, test_data, testloader = get_data.get_PASCAL(batch_size=32)
 
 # get models
 resnet_model = models.ResNet18()
@@ -34,10 +34,10 @@ wandb_config = {
 wandb_logger = WandbLogger(project='PASCALVOC-Resnet18-Segmentation', config=wandb_config)
 
 # lightning module
-autoencoder = lightning_modules.PASCALModule(seg_model)
+autoencoder = lightning_modules.PascalModule(seg_model)
 
 # train
-trainer = L.pytorch.Trainer(accelerator='auto', max_epochs=4, logger=wandb_logger)
+trainer = L.pytorch.Trainer(accelerator='auto', max_epochs=100, logger=wandb_logger)
 trainer.fit(model=autoencoder, train_dataloaders=trainloader, val_dataloaders=testloader)
 
 # test
